@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Tabroom Pairings Info",
+    "description": "embeds opp record and judge para in html of pairing",
+    "version": "1.0",
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "https://www.tabroom.com/user/student/index.mhtml?err=&msg=",
+        "https://www.tabroom.com/user/student/index.mhtml?person_id=*",
+        "https://www.tabroom.com/user/student/history.mhtml?*"
+    ],
+    "content_scripts": [{
+        "matches": [
+            "https://www.tabroom.com/user/student/index.mhtml?err=&msg=",
+            "https://www.tabroom.com/user/student/index.mhtml?person_id=*",
+            "https://www.tabroom.com/user/student/history.mhtml?*"
+        ],
+        "js": ["content.js"]
+    }]
+}

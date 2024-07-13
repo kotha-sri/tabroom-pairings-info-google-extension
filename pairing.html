@@ -1,0 +1,1536 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset = utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+
+		
+			<link rel="stylesheet" type="text/css" href="/lib/css/reset.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/jqueryui.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/fonts/fonts.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/select2.min.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/uniform.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/alertify.min.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/alertify-bootstrap.min.css">
+			<link rel="stylesheet" type="text/css" href="/lib/css/tabroom.v20.css">
+
+			<title>
+				  Tabroom.com
+			</title>
+
+				<script type="text/javascript" src="/lib/javascript/tabroom.v38.min.js"></script>
+
+			<script>
+				$(".alert").on('click', function(e){
+					e.preventDefault();
+					var href = this.href;
+					alertify.confirm("Are you sure?", function (e) {
+						if (e) {
+							window.location.href = href;
+						}
+					});
+				});
+
+				$(document).ready(function(){
+
+					// put the focus on the first editable element.
+					$('*:input:enabled:visible:not(.notfirst):not(input[type="submit"]):first').focus();
+					$('.starthere').focus();
+
+					// Control-s gives you the search box
+					Mousetrap.bind('mod+s', function(e) {
+						$('#searchtext').focus();
+						return false;
+					});
+
+					// Sets up the little arrows to close and open the sidebars
+					$(".menu").prepend("<div class='shade openshade fa fa-forward'></div>");
+					$("#content").prepend("<div class='hidden shade closedshade fa fa-backward'></div>");
+
+					$(".shade").click( function() {
+						$(".menu").toggleClass("hidden");
+						$(".closedshade").toggleClass("hidden");
+						$(".main").toggleClass("mainfull");
+						$(".tabad_carousel").toggleClass("tabad_full");
+					});
+
+					// Scales any text to the size of its parent element that
+					// wants that
+					$(".scalefont").bigtext();
+
+					// adds zebra striping to elements, and resizes inputs to
+					// the size of their parent
+
+					fixVisual();
+				});
+			// Display notifications
+
+			$(document).ready(function() {
+
+				alertify.set('notifier','position', 'bottom-left');
+				alertify.defaults.transition = "slide";
+				alertify.defaults.theme.ok = "btn btn-primary";
+				alertify.defaults.theme.cancel = "btn btn-danger";
+				alertify.defaults.theme.input = "form-control";
+
+
+
+
+
+
+
+
+
+			});
+			</script>
+
+
+			<meta property="og:image" content="http://www.tabroom.com/lib/images/nsda-blue.png">
+	<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160201" defer=""></script><style>body.tablesorter-disableSelection { -ms-user-select: none; -moz-user-select: -moz-none;-khtml-user-select: none; -webkit-user-select: none; user-select: none; }.tablesorter-resizable-container { position: relative; height: 1px; }.tablesorter-resizable-handle { position: absolute; display: inline-block; width: 8px;top: 1px; cursor: ew-resize; z-index: 3; user-select: none; -moz-user-select: none; }</style><style id="bigtext-style">.bigtext * { white-space: nowrap; } .bigtext > * { display: block; }
+.bigtext .bigtext-exempt, .bigtext .bigtext-exempt * { white-space: normal; }</style><link rel="stylesheet" href="https://onesignal.com/sdks/web/v16/OneSignalSDK.page.styles.css?v=2"></head>
+	<body>
+		<div id="overlay">
+			<div id="header">
+				<div id="headerarch">
+					<span id="logo" title="The REAL Palmer House">
+						<a tabindex="-1" href="/index/index.mhtml">
+							<img src="/lib/images/tabroom-logo.png" alt="Tabroom.com by the National Speech and Debate Association">
+						</a>
+					</span>
+
+					<span id="toprow">
+
+
+								<a tabindex="-1" href="/user/login/logout.mhtml" class="fa fa-2x fa-sign-out loginicons" id="tabroom_logout" alt="Log Out of Tabroom" title="Log Out of Tabroom">
+								</a>
+
+								<a tabindex="-1" href="/user/login/profile.mhtml" class="fa fa-2x fa-user loginicons" id="tabroom_profile" alt="Tabroom Account Profile" title="Tabroom Account Profile">
+								</a>
+
+								<a tabindex="-1" href="/user/home.mhtml" id="tabroom_homescreen loginicons" class="fa fa-2x fa-home" alt="Tabroom Home Screen" title="Tabroom Home Screen">
+								</a>
+
+									<a tabindex="-1" id="tabroom_inbox" href="/inbox" class="fa fa-sm fa-envelope borderright" alt="Tabroom Inbox" title="Tabroom Inbox"><span id="inbox_count" class="hidden"></span>
+	</a>
+
+
+
+	<script>
+
+		$(document).ready(function () {
+			youveGotMail();
+			setInterval(youveGotMail, 30000);
+		});
+
+		function youveGotMail() {
+
+			$.ajax({
+				type                : 'GET',
+				url                 : 'https://api.tabroom.com/v1/user/inbox/unread',
+				crossDomain         : true,
+				xhrFields           : {
+					withCredentials : true
+				},
+				error: (data, status, metadata) => {
+					console.log(data);
+				},
+				success: (data, status, metadata) => {
+					if (data > 0) {
+						$(`#tabroom_inbox`).addClass('orangetext');
+						$(`#inbox_count`).removeClass('hidden');
+						$(`#inbox_count`).html(data);
+					} else {
+						$(`#tabroom_inbox`).removeClass('orangetext');
+						$(`#inbox_count`).addClass('hidden');
+					}
+				}
+			});
+		}
+
+	</script>
+
+
+
+
+							<a tabindex="-1" href="/user/home.mhtml" id="tabroom_edlee" class="noborder padvert">
+									kothasri07@gmail.com
+							</a>
+
+
+
+							<span class="searchfilter">
+
+								<form action="/index/search.mhtml" method="post">
+
+								<input type="hidden" name="caller" value="/user/student/history.mhtml?tourn_id=27950&amp;student_id=1147308">
+									<span id="search" class="full flexrow" title="Search for tournaments">
+										<span class="fourfifths nospace">
+											<input type="text" name="search" placeholder="SEARCH TOURNAMENTS" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="searchtext" class="notfirst" tabindex="-1" style="width: 150.969px;">
+										</span>
+										<span class="fifth rightalign nospace padright">
+											<button type="submit" class="search notfirst">
+												<img src="/lib/images/search.png">
+											</button>
+										</span>
+									</span>
+								</form>
+							</span>
+
+						<span id="helpbutton" title="Tabroom Help">
+							<a tabindex="-1" href="http://docs.tabroom.com" target="_blank" class="fa fa-question-circle">
+							</a>
+						</span>
+
+							
+	<a id="push-bell" tabindex="-1" class="fa fa-2x fa-bell redtext" alt="Tabroom Notifications" onclick="showPushLogin();" ;="" title="You will not receive Tabroom notifications on this device.  Click to subscribe"></a>
+
+	<div id="push-subscribe" class="centeralign" style="display: none;" onclick="hidePushLogin();">
+		<span class="nospace ninetenths hidden" id="push-blocked">
+			<p class="biggish semibold leftalign blueborderbottom">
+				Your Browser Is Blocking Us
+			</p>
+
+			<p>
+				An extension or ad-blocker is blocking our ability to send you
+				blast notifications on this browser.  Please disable any such
+				extensions if you want to get Tabroom notifications here.
+			</p>
+		</span>
+
+		<span class="hidden nospace ninetenths" id="push-impossible">
+			<p class="biggish semibold leftalign blueborderbottom">
+				Your browser blocks notifications
+			</p>
+
+			<p>
+				To send notifications to this device, you must allow Tabroom to
+				send them to you. This browser has been configured to block
+				notifications.
+			</p>
+
+			<p>
+				On most browsers, fixing this requires you to it the
+				<img src="/lib/images/url_settings.png" height="24">
+				icon above (next to the URL) and click the notifications settings.
+			</p>
+		</span>
+
+		<span class="nospace ninetenths" id="push-permission">
+			<p class="biggish semibold leftalign blueborderbottom">
+				Browser permission required
+			</p>
+
+			<p>
+				To send notifications to this device, you must allow
+				Tabroom to send them to you.
+			</p>
+
+			<p>
+				If this button does not prompt you to allow notifications
+				above, then you have blocked this site (or all sites) from
+				notifications, and will have to correct it in your browser
+				settings.
+			</p>
+
+			<div class="full rightalign">
+				<span class="half centeralign">
+					<button class="medium orange" onclick="OneSignal.Notifications.requestPermission();">Allow Blasts</button>
+				</span>
+			</div>
+
+		</span>
+
+		<span class="hidden nospace ninetenths" id="push-form">
+
+			<p class="biggish semibold leftalign blueborderbottom">
+				Enable Tabroom Blasts
+			</p>
+
+			<p>
+				Most cell providers no longer allow Tabroom to text our users
+				for free. But now, you can subscribe to get your Tabroom
+				blasts on this browser. Web Blasts work on both mobile and
+				desktop devices.
+			</p>
+
+			<div class="full rightalign">
+				<span class="half centeralign">
+					<div id="toprow-push-box" class="onesignal-customlink-container"><button class="onesignal-reset onesignal-customlink-subscribe medium button state-unsubscribed" type="button" style="background-color: var(--dark-red); color: var(--background-white);">Subscribe This Device</button></div>
+				</span>
+			</div>
+		</span>
+	</div>
+
+	<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer=""></script>
+
+	<script>
+
+		window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+		OneSignalDeferred.push( async (OneSignal) => {
+
+			async function checkStatus() {
+
+				const tabroomId = "428621";
+
+				let currentPush      = "";
+				let sessionSubId     = "";
+				let sessionSubStatus = "";
+				let oneSignalUser    = {};
+
+				try {
+
+					oneSignalUser = await $.ajax({
+						type : 'GET',
+						url  : `https://onesignal.com/api/v1/apps/cebdea60-9d8d-4541-b1d2-785fd82d163b/users/by/external_id/${tabroomId}`,
+					});
+
+					oneSignalUser.subscriptions?.forEach( (sub) => {
+						if (sub.id === sessionSubId) {
+							oneSignalUser.currentSubscription = sub;
+						}
+					});
+
+
+					if (oneSignalUser?.subscriptions?.length > 19) {
+						oneSignalUser.subscriptions.forEach( async (sub) => {
+							if (sub.enabled) {
+								return;
+							}
+							await $.ajax({
+								type : 'DELETE',
+								url  : `https://onesignal.com/api/v1/apps/cebdea60-9d8d-4541-b1d2-785fd82d163b/subscriptions/${sub.id}`
+							});
+						});
+					}
+
+					if (!sessionSubId) {
+
+						if (OneSignal.User?.PushSubscription?._id) {
+							sessionSubId = OneSignal.User.PushSubscription._id;
+						}
+
+						oneSignalUser.subscriptions?.forEach( (sub) => {
+							if (sub.id === sessionSubId) {
+								oneSignalUser.currentSubscription = sub;
+							}
+						});
+
+						if (oneSignalUser.currentSubscription) {
+							const response = await $.ajax({
+								type        : 'POST',
+								data        : oneSignalUser,
+								url         : `https://api.tabroom.com/v1/user/push/enable`,
+								crossDomain : true,
+								xhrFields: {
+									withCredentials: true
+								},
+							});
+							console.log(response);
+						}
+					}
+
+				} catch (err) {
+					console.log(err);
+				}
+
+				if (!oneSignalUser?.currentSubscription?.id && sessionSubId) {
+					// I have a current subscription in this session but it
+					// does not match with anything in the OneSignal database.
+					// If so, try to take control of that subscription.
+
+					const subData = {
+						identity: {
+							external_id: `${tabroomId}`,
+						}
+					};
+
+					let transferResponse = {};
+
+					try {
+
+						response = await $.ajax({
+							url  : `https://onesignal.com/api/v1/apps/cebdea60-9d8d-4541-b1d2-785fd82d163b/subscriptions/${sessionSubId}/owner`,
+							type        : 'PATCH',
+							contentType : 'application/json',
+							dataType    : "json",
+							data        : JSON.stringify(subData),
+						});
+
+						console.log(`Patch attempted, response is`);
+						console.log(response);
+
+					} catch (err) {
+
+						const errorCodes = JSON.parse(err.responseText);
+						const errorCode = errorCodes?.errors[0];
+
+						if (errorCode?.title === "Subscription not found") {
+
+							console.log('Subscription not found.  Subscribing anew');
+							const response = await OneSignal.login(tabroomId);
+
+							console.log(`Response was`);
+							console.log(response);
+
+							oneSignalUser = await $.ajax({
+								type : 'GET',
+								url  : `https://onesignal.com/api/v1/apps/cebdea60-9d8d-4541-b1d2-785fd82d163b/users/by/external_id/${tabroomId}`,
+							});
+
+
+							oneSignalUser.subscriptions?.forEach( (sub) => {
+								if (sub.id === sessionSubId) {
+									oneSignalUser.currentSubscription = sub;
+								}
+							});
+
+
+						} else {
+							console.log(`Error: text ${err.responseText}`);
+							console.log(errorCode);
+						}
+					}
+				}
+
+				if (!oneSignalUser.currentSubscription?.id && sessionSubId ) {
+
+					try {
+						console.log(`Removing invalid subscription ID ${sessionSubId}`);
+						await OneSignal.logout(tabroomId);
+						const response = await $.ajax({
+							type        : 'DELETE',
+							url         : `https://api.tabroom.com/v1/user/push/disable`,
+							crossDomain : true,
+							xhrFields   : {
+								withCredentials: true
+							},
+							headers    : {
+								'Content-Type' : 'application/json',
+							},
+						});
+						console.log(response);
+					} catch (err) {
+						console.log('Error on user info update');
+						console.log(err);
+					}
+				}
+
+				if (oneSignalUser.currentSubscription?.enabled) {
+					bellGood();
+				} else {
+					bellBad();
+				}
+
+				checkPerms();
+			};
+
+			function checkPerms() {
+
+				if (!('Notification' in window)) {
+					permsImpossible();
+				} else if (Notification.permission === "granted") {
+					permsGood();
+				} else if (Notification.permission === "denied") {
+					permsImpossible();
+    			} else {
+					permsBad();
+					bellBad();
+				}
+  			}
+
+			try {
+
+				OneSignal.init({
+					appId           : "cebdea60-9d8d-4541-b1d2-785fd82d163b",
+					safari_web_id   : "web.onesignal.auto.3b385de2-9d64-4c4d-bcc9-f67f460e32ab",
+					autoResubscribe     : true,
+					persistNotification : false,
+
+					notifyButton  : {
+						enable     : false,
+					},
+					welcomeNotification : {
+						title           : 'Your Tabroom Blasts Enabled!',
+						message         : 'Tabroom blasts for kothasri07@gmail.com will now arrive looking like this message. If you want to disable them on this device, go to Tabroom in your browser (or click a blast notification) and click the green bell in the top right corner of any Tabroom screen.',
+						url             : 'https://www.tabroom.com/user/home.mhtml'
+					},
+					promptOptions: {
+						customlink: {
+							enabled : true,
+							style   : 'button',
+							size    : 'medium',
+							color   : {
+								button : 'var(--dark-red)',
+								text   : 'var(--background-white)',
+							},
+							text: {
+								subscribe   : 'Subscribe This Device',
+								unsubscribe : 'Unsubscribe This Device',
+							}
+						},
+						unsubscribeEnabled: true,
+					}
+				}).then( () => {
+					checkStatus();
+				});
+
+			} catch (err) {
+				console.log(`OneSignal initialization failed.  Disabling push notification on this browser`);
+				console.log(err);
+				checkStatus();
+			}
+
+			function permChanger(event) {
+				if (event?.current?.optedIn) {
+					OneSignal.Notifications.permission = true;
+					permsGood();
+				} else {
+					permsBad();
+				}
+				checkStatus();
+			}
+
+			function subChanger(event) {
+				if (event?.current?.optedIn) {
+					bellGood();
+				} else {
+					bellBad();
+				}
+			}
+
+			OneSignal.User.PushSubscription.addEventListener("change", subChanger);
+			OneSignal.Notifications.addEventListener("permissionChange", permChanger);
+		});
+
+		function showPushLogin() {
+			$(`#push-subscribe`).slideToggle();
+			$(`#push-bell`).toggleClass('pushed', 500);
+		};
+
+		function hidePushLogin() {
+			$(`#push-subscribe`).delay(200).slideToggle();
+			$(`#push-bell`).removeClass('pushed', 500);
+		};
+
+
+		function permsImpossible() {
+			$(`#push-blocked`).addClass('hidden');
+			$(`#push-permission`).addClass('hidden');
+			$(`#push-form`).addClass('hidden');
+			$(`#push-impossible`).removeClass('hidden');
+		}
+
+		function permsGood() {
+			$(`#push-blocked`).addClass('hidden');
+			$(`#push-permission`).addClass('hidden');
+			$(`#push-impossible`).addClass('hidden');
+			$(`#push-form`).removeClass('hidden');
+		}
+
+		function permsBad() {
+			$(`#push-blocked`).addClass('hidden');
+			$(`#push-permission`).removeClass('hidden');
+			$(`#push-impossible`).addClass('hidden');
+			$(`#push-form`).addClass('hidden');
+		}
+
+		function bellBad() {
+			$(`#push-bell`).addClass('redtext');
+			$(`#push-bell`).removeClass('greentext');
+			$(`#push-bell`).attr('title', "You will not receive Tabroom notifications on this device.  Click to subscribe");
+		}
+
+		function bellGood() {
+			$(`#push-bell`).removeClass('redtext');
+			$(`#push-bell`).addClass('greentext');
+			$(`#push-bell`).attr('title', "You receiving Tabroom notifications on this device.  Click to unsubscribe");
+		}
+
+	</script>
+
+
+
+					</span>
+
+				</div>
+
+				<span id="menus">
+						
+	<ul id="nav">
+
+		<li class="top">
+
+			<a class="centeralign top_link" href="/">
+				<span class="down">
+					Home
+				</span>
+			</a>
+
+		</li>
+
+		<li class="top">
+
+			<a class="centeralign top_link" href="/index/circuits.mhtml">
+				<span class="down">
+					Circuits
+				</span>
+			</a>
+
+		</li>
+
+		<li class="top">
+
+			<a class="centeralign top_link" href="/index/results/">
+				<span class="down">
+					Results
+				</span>
+			</a>
+
+		</li>
+
+		<li class="top">
+			<a class="centeralign top_link" href="/index/paradigm.mhtml">
+				<span class="down">
+					Paradigms
+				</span>
+			</a>
+		</li>
+
+		<li class="top">
+			<a class="centeralign top_link" href="/index/help.mhtml">
+				<span class="down">
+					Help
+				</span>
+			</a>
+		</li>
+
+		<li class="top">
+			<a class="centeralign top_link" href="/index/about.mhtml">
+				<span class="down">
+					About
+				</span>
+			</a>
+		</li>
+
+	</ul>
+
+
+				<span>
+			</span></span></div>
+
+
+
+	<div id="wrapper">
+		<div id="content"><div class="hidden shade closedshade fa fa-backward"></div>
+
+	
+		<div class="menu"><div class="shade openshade fa fa-forward"></div>
+
+
+
+		
+
+
+
+		<div class="sidenote">
+
+			<h4>
+				Judging
+			</h4>
+
+
+
+
+			<a class="blue half" href="/user/judge/conflicts.mhtml">
+				Standing Conflicts
+			</a>
+
+			<a class="blue half" href="/user/judge/paradigm.mhtml">
+				Paradigm
+			</a>
+
+			<a class="blue half" href="/user/judge/certifications.mhtml">
+				Judge Certifications
+			</a>
+
+			<a class="blue half" href="/user/judge/hire.mhtml?person_id=428621">
+				Offer Hired Judging
+			</a>
+
+	</div>
+
+
+
+
+
+			<div class="sidenote">
+
+				<h4>
+					Competing
+				</h4>
+
+				<a class="blue full flexrow" href="/user/student/index.mhtml?person_id=428621">
+					Entries
+				</a>
+
+				<a class="blue full flexrow" href="/user/student/conflicts.mhtml">
+					Standing Conflicts
+				</a>
+
+				<a class="blue full flexrow" href="/user/student/parents.mhtml">
+					Parent Notifications
+				</a>
+			</div>
+
+		<div class="sidenote">
+
+			<h4>NSDA Campus Test Rooms</h4>
+
+			<div class="row flexrow even" title="This online room is on the NSDA Campus server.  It will disconnect you after 2 mins.">
+				<span class="twothirds padleft nospace">
+					<div class="semibold bluetext padtopless biggish">
+						Test Campus Room
+					</div>
+					<div class="explain">
+						Hebron High School
+					</div>
+				</span>
+
+				<span class="third centeralign" title="Hebron High School">
+					
+
+		<form id="meet_" action="https://campus.speechanddebate.org" method="post" target="_blank">
+
+			<input name="json" type="hidden" value="eyJhbGciOiJIUzI1NiJ9.eyJyb29tSW5zdHJ1Y3Rpb25zIjoiVGhpcyBpcyBhIHRlc3Qgb2YgYW4gTlNEQSBDYW1wdXMgQ29tcGV0aXRpb24gUm9vbSAtIHRoaXMgcm9vbSBpcyBOT1QgcHJpdmF0ZS4iLCJwYW5lbF90eXBlIjoidGVzdF9wcml2YXRlIiwicm9vbU5hbWUiOiJIZWJyb24gSGlnaCBTY2hvb2wgQ29tcGV0aXRpb24gUm9vbSBUZXN0Iiwicm9sZSI6ImNvbXBldGl0b3IiLCJ1dWlkIjoiSGVicm9uSGlnaFNjaG9vbCIsIm1vZGUiOiJuc2RhX2NhbXB1cyIsInN1cHBvcnRFbWFpbCI6ImluZm9Ac3BlZWNoYW5kZGViYXRlLm9yZyIsInBhbmVsX2lkIjpudWxsLCJmb3JjZUNsb3NlIjoidHJ1ZSIsImRpc3BsYXlOYW1lIjoiU3Jpa2FyIEtvdGhhIiwic2VydmVyIjoicHJpdmF0ZSJ9.1xbKtm5FtYoz3Myqc7Evxlmsf_QD8rXTT2wgcZxQiJ8">
+
+
+
+				<button type="button" target_id="" property_name="" setting_name="test_private" related_thing="Hebron High School Competition Room Test" alt="Hebron High School Competition Room Test" tourn_id="" class="invert fa fa-video-camera fa-lg buttonwhite bluetext marno notfirst" onclick="postSwitch(this, '/user/campus/room_log.mhtml'); this.form.submit();"></button>
+			</form>
+
+
+				</span>
+			</div>
+
+			<h4>Your Account</h4>
+
+			<a class="yellow full flexrow" href="/user/unfollow.mhtml">
+				Edit Live Updates/Parent Memos
+			</a>
+
+			<a class="yellow full flexrow" href="/user/chapter/create.mhtml">
+				Create a new school/team
+			</a>
+
+			<a class="yellow full flexrow" href="/user/tourn/request.mhtml">
+				Request a new tournament
+			</a>
+
+			<a class="yellow full flexrow" href="/user/judge/search.mhtml">
+				Link your account to a judge
+			</a>
+
+			<a class="yellow full flexrow" href="/user/student/search.mhtml">
+				Link your account to a competitor
+			</a>
+
+		</div>
+
+		</div>
+
+
+
+	<div class="main">
+
+		<span class="threequarters nospace">
+			<h4>Srikar  Kotha</h4>
+		</span>
+
+		<span class="quarter nospace rightalign right">
+			<a class="buttonwhite greentext fa fa-lg fa-home" href="/user/student/index.mhtml#history"></a>
+		</span>
+
+
+			
+		<h5 class="martopmore padbottom blueborderbottom marno">
+			The Wildcat Winter Whirlwind Plano Swing
+		</h5>
+
+	<div class="full flexrow padtop wrap bordertop marno">
+
+		<span class="half padleftmore wrap">
+			<div class="full graytext semibold bigger">
+				Entry in Public Forum Debate (PF)
+			</div>
+
+			<div class="full bluetext semibold martop">
+					Your Code: Hebron CK
+			</div>
+
+
+		</span>
+
+		<span class="flexrow right half wrap">
+
+
+
+		</span>
+	</div>
+
+
+
+
+
+	
+
+	<script type="text/javascript">
+
+        $(document).ready(function() {
+
+			$("#5459469").tablesorter({
+				cssAsc            : "sortup",
+				cssDesc           : "sortdown",
+				cssHeader         : "sortable",
+				sortInitialOrder  : "desc",
+				ignoreCase        : true,
+				saveFileName      : "5459469.csv",
+				sortLocaleCompare : true,
+				widgets           : ['zebra', 'columns', 'stickyHeaders', 'print', 'output'],
+				textExtraction    : "basic",
+				textAttribute     : 'data-text',
+				initialized       : function(table) {
+					$(".focushere").focus();
+				},
+				widgetOptions : {
+					columns          : [ "primary", "secondary", "tertiary" ],
+					print_rows       : "f",
+					print_columns    : "v",
+					print_now        : true,
+					print_styleSheet : "/lib/css/print.css",
+					output_saveRows  : "visible",
+					output_delivery  : "download",
+				}
+			});
+
+
+			$("#5459469_buttonarea").addClass("martop");
+
+		});
+
+	</script>
+
+
+
+
+		<div class="full nospace martop dkborderbottom marbottommuchmore padleft">
+
+		<p class="biggish semibold">
+			Your Assignments
+		</p>
+
+		<table id="5459469" class="tablesorter tablesorter-default tablesorter00e8ff1b54476 hasStickyHeaders" role="grid">
+			<thead>
+				<tr class="smallish semibold yellowrow tablesorter-headerRow" role="row">
+
+					<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted" data-column="0" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Round: No sort applied, activate to apply a descending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+						Round
+					</div></th>
+
+					<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted" data-column="1" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Start: No sort applied, activate to apply a descending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+						Start
+					</div></th>
+
+					<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted" data-column="2" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Room: No sort applied, activate to apply a descending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+						Room
+					</div></th>
+
+						<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted" data-column="3" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Side: No sort applied, activate to apply a descending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+							Side
+						</div></th>
+
+						<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted" data-column="4" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Opponent: No sort applied, activate to apply a descending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+							Opponent
+						</div></th>
+
+
+					<th class="smallish nosort tablesorter-header sortable tablesorter-headerUnSorted" data-column="5" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Judges
+						
+						
+							Results/Comments: No sort applied, activate to apply a descending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+						<span class="threesevenths">
+							Judges
+						</span>
+						<span class="foursevenths">
+							Results/Comments
+						</span>
+					</div></th>
+
+
+				</tr>
+			</thead>
+
+			<tbody aria-live="polite" aria-relevant="all">
+				<tr class="row odd" role="row">
+
+					<td class="smallish centeralign">
+						Round 4
+						Flt 2
+					</td>
+
+					<td class="smallish leftalign">
+						<span class="leftalign" style="min-width: 75%;">
+
+							Sat 12:35 PM
+						</span>
+					</td>
+
+					<td class="leftalign padleft padvertless limit3 wrap">
+
+								B113
+
+					</td>
+
+
+						<td class="smallish centeralign">
+							Con
+
+						</td>
+
+						<td class="smallish">
+							Flower Mound GK
+						</td>
+
+
+					<td class="smallish nospace">
+
+
+								<div class="full nospace flexrow">
+
+								<span class="threesevenths nowrap padvert marvertno smallish padleft" title="Wevodau, Aidan">
+										<span class="fifth centeralign nospace" title="Paradigm">
+											<a class="greytext buttonwhite smaller padmuchless marno" target="_blank" href="/index/paradigm.mhtml?judge_person_id=71978">P</a>
+										</span>
+									Wevodau, Aidan
+								</span>
+
+
+									<span class="ltborderright ltborderleft foursevenths nospace">
+
+											<span class="sixth marno semibold centeralign nospace">
+												W
+											</span>
+
+											<span class="threefifths nospace rightalign">
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																NC
+															</span>
+															<span class="third nospace smaller">
+																29.5
+															</span>
+															<span class="third nospace">
+																1
+																
+															</span>
+														</span>
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																SK
+															</span>
+															<span class="third nospace smaller">
+																28.5
+															</span>
+															<span class="third nospace">
+																3
+																
+															</span>
+														</span>
+											</span>
+
+											<span class="eighth leftalign hover marno padno centeralign">
+												<a class="bluetext marno fa fa-tiny padmuchless fa-file-text-o full padvert" target="_blank" title="RFD, Comments and Feedback" onclick="toggleView('7073965_feedback', 'feedback');"></a>
+											</span>
+
+
+								</span></div>
+					</td>
+
+
+				</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr><td colspan="6" style="margin: 0px; padding: 0px;"><p class="biggish semibold" style="background-color: indianred; border: 1px solid black; margin: 0px; padding:4px; font-size: 16px;">Measam Ali Paradigm</p></td></tr>
+<tr style="border: 5px;border-color: #ddff00;height: 300px;">
+<td colspan="6" style="padding: 0px;">
+<div class="paradigm ltborderbottom" style="padding: 0px;height: 300px;overflow: auto;background-color: #ff98b0; border: 1px solid black;">
+				<p><em><strong><span style="font-size: 10pt;"><em><strong>***For all of the lifetime of this page, this page will be a work in progress (W.I.P)***</strong></em></span></strong></em></p>
+<p><em><strong><span style="font-size: 10pt;"><em><strong>**Up to date for Plano West TFA (09/09/2023) still subject to change through the event**</strong></em></span></strong></em></p>
+<p><strong>Hiii Everyone!!!</strong></p>
+<p><em>--email: measama380@gmail.com--</em></p>
+<p><span style="font-size: 14pt;"><strong>Some background about me:</strong></span></p>
+<p><span style="font-size: 10pt;">I am Hebron Alumni, currently 21 years old, and a Senior at UNT, studying computer science. Some things I like are video games, watching k-dramas, listening to k-pop, and most of all spending time with friends. I have officially debated in NCX, NPF, and VPF. But I have learned and practiced all forms of speech and debate. I never got a chance to go to state or TOC, due to unfortunate circumstances. I have always enjoyed debating, because of the freedom it gave me, to talk about the real world, without any censorship from adults. With that being said, I appreciate those who truly give their best to their event.</span></p>
+<p><span style="font-size: 10pt;">If you can tell me who my bias is, then I will give you the win ;)<span style="font-size: 8pt;">*its a joke, but I will up ur speaks If u get it right</span></span></p>
+<p></p>
+<p></p>
+<p style="text-align: center;"><strong><span style="font-size: 18pt;">Context to Debate:</span></strong></p>
+<p style="text-align: center;"><span style="font-size: 10pt;">Debate is not mathematics. The round does not exist as a confined 3-dimensional space with certain laws of conservation. Debate is a form of conversation where members of the discussion are presenting their point of view and trying to persuade the listener to agree or join their side. With that being said, I expect that everyone in the round understands, that I am also a human being like everyone, and am prone to making a mistake. I will try my 110% to be objective in the round, so don't dismiss what I have said. You might not like it, and think I am wrong, but understand that all decisions made are still subjective to what made sense in my brain. I have been in your shoes, so please be patient and understanding with me, and we will have a great time.</span></p>
+<p style="text-align: center;"></p>
+<p style="text-align: center;"><span style="font-size: 14pt;"><strong>*****Disregard of the rules of ethics and mannerism in a round is an immediate loss, <em>I Do Not Care!*****</em></strong></span></p>
+<p><span style="font-size: 14pt;"><strong>IE:</strong></span></p>
+<p>I base all my decisions on the criteria presented by NSDA, which differ between each event, if there is anything of concern that happens during the round please let me know immediately so we can fix it.</p>
+<p><span style="font-size: 14pt;"><strong>Congress:</strong></span></p>
+<p>I base all my decisions on the criteria presented by NSDA. I uphold congress to the same integrity as CX, LD, and PF. If there is anything of concern that happens during the round please let me know immediately so we can fix it.</p>
+<p><span style="font-size: 14pt;"><strong>CX, LD, PF:</strong></span></p>
+<p><span style="font-size: 14pt;"><strong>(*For Online Tournaments*)</strong></span></p>
+<p><strong>Pre-round expectations:</strong></p>
+<p><span style="font-size: 10pt;">I expect everyone to have read the paradigm before entering the call. The only question that should be asked is those pertaining to statements that are not clear or have not been discussed on the page.</span></p>
+<p><em><span style="font-size: 10pt;">--&gt;see the rest of the paradigms under the in-person section&lt;--</span></em></p>
+<p></p>
+<p><strong><span style="font-size: 14pt;">(*For in-person tournaments*)</span></strong></p>
+<p><span style="font-size: 12pt;"><strong>Pre-round expectations:</strong></span></p>
+<p><span style="font-size: 10pt;">I expect everyone to have read the paradigm before entering the room. The only question that should be asked is those pertaining to statements that are not clear or have not been discussed on the page.</span></p>
+<p><strong>During the round:</strong></p>
+<p><span style="font-size: 10pt;">All of Crossfire <strong>will not</strong> be noted down on the flow, I will probably listen to the crossfire to make sure that it is still civil, and noted down any points that might affect speaker points. A reminder: Crossfire is for you to ask questions and clarify anything in the round with opponents. Anything that is brought up and you want me to vote off it, you must bring it up in your following speech.</span></p>
+<p><span style="font-size: 10pt;"><strong>Progressive Arguments (aka disad, theory, k):</strong></span></p>
+<p><span style="font-size: 10pt;">I am fine with any progressive argument except Disclosure Theory. PF is not CX, there is no reason to run such an argument. If you still feel like running it, I will not even consider it part of the round when voting, if I didn't buy the reasoning or analysis. Further, if you run </span><span style="font-size: 10pt;">a progressive argument without changing it to be at the VPF level, and I don't understand, I simply won't vote off of it</span></p>
+<p><strong><span style="font-size: 10pt;">Overview and Under view:</span></strong></p>
+<p><span style="font-size: 10pt;">I encourage having it, so I can have some parameters to vote off of, but I will not take it under consideration if it has not been carried throughout the entire round, in each speech (except rebuttal, ask before the round for more details).</span></p>
+<p><strong><span style="font-size: 10pt;">Contention:</span></strong></p>
+<p><span style="font-size: 10pt;">I expect that the contention is readable in 4 minutes without having to spread. So here is your fair warning, DO NOT SPREAD, if I can't follow you at your speed, I will either stop flowing or only write what I hear. This will probably hurt you. So be careful. IF you want to read really fast, send me the speech doc before the round, and make sure that it is the one you are reading. If you fail to do so, I cannot be held responsible for what I missed. I want clear signposting when you transition from Uniqueness, Link, Internal Link, and Impact.</span></p>
+<p><strong><span style="font-size: 10pt;">Rebuttal:</span></strong></p>
+<p><span style="font-size: 10pt;">For the first speaking team, I expect to hear a full frontal attack on the opponent's case. You can preemptively defend your case, but I will On the other hand, I expect the second-speaking team to attack and defend their case in the 4 min. Be sure to warrant analysis. I love to hear about turns on links and impacts, which creates ground for the clash needed in a debate round.</span></p>
+<p><strong><span style="font-size: 10pt;">Summary:</span></strong></p>
+<p><span style="font-size: 10pt;">NO NEW EVIDENCE FROM THE SECOND-SPEAKING TEAM! I expect to hear a summary of the round, with collapsing. Be sure to have Impact calculus or weighing.</span></p>
+<p><strong><span style="font-size: 10pt;">Final Focus: </span></strong></p>
+<p><span style="font-size: 10pt;">Give me voters. Why should I vote for you? NO NEW EVIDENCE!</span></p>
+<p><span style="font-size: 10pt;"><strong>Speaker Points:</strong> </span></p>
+<p><span style="font-size: 10pt;">I am not progressive in speaking. Don't spread, speak with emphasis on tags, speak clearly and loudly, and if you can make me laugh, you get higher speaks.</span></p>
+<p><strong><span style="font-size: 12pt;">After the Round:</span></strong></p>
+<p>I plan to disclose if I can come up with RFD within 5 minutes.<span style="font-size: 12pt;"> If the round is muddled then, It will take more time, be patient.</span></p>
+<p><strong><span style="font-size: 12pt;">The Use of Evi<span style="font-size: 10pt;">dence:</span></span></strong></p>
+<p><span style="font-size: 12pt;"><span style="font-size: 10pt;">I will ask you to show me evidence if I find it unclear, couldn't hear, or suspicious. I might ask you to pull up the original article, so be ready to find it; the only excuse I will take if the wifi is poor or lacking. I will try to search it up on my computer too, but if I cant find it either, we have problems.</span></span></p>
+			</div>
+</td>
+            </tr><tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+            <tr style="margin: 0px;"><td colspan="6" style="margin: 0px; padding: 0px;"><p class="biggish semibold" style="background-color: #f2b3f5; border: 1px solid black;margin: 0px; padding: 4px; font-size: 16px;">Hebron FW Record</p></td></tr>
+<tr class="yellowrow" data-reactid=".1.0.0" style="font-size:12px; border: 1px solid black;">
+                <th data-reactid=".1.0.0.$Comparison" style="font-size:12px; border-top: 1px solid black; border-left: 1px solid black;">Comparison</th>
+                <th data-reactid=".1.0.0.$Prelim Rds" style="font-size:12px; border-top: 1px solid black;">Prelim Rds</th>
+                <th data-reactid=".1.0.0.$Prelim Ballots" style="font-size:12px; border-top: 1px solid black;">Prelim Ballots</th>
+                <th data-reactid=".1.0.0.$Elim Rds" style="font-size:12px; border-top: 1px solid black;">Elim Rds</th>
+                <th data-reactid=".1.0.0.$Elim Ballots" style="font-size:12px; border-top: 1px solid black;">Elim Ballots</th>
+                <th data-reactid=".1.0.0.$Total" style="font-size:12px; border-top: 1px solid black; border-right: 1px solid black;">Total</th>
+            </tr>
+        
+        
+            <tr data-reactid=".1.1.0" style="font-size:12px;background-color: #5d5bff;border: 1px solid black;">
+                <td data-reactid=".1.1.0.0:0" style="border-bottom: 1px solid black; border-left: 1px solid black;">Totals</td>
+                <td data-reactid=".1.1.0.0:1" style="border-bottom: 1px solid black;">0% (0/0)</td>
+                <td data-reactid=".1.1.0.0:2" style="border-bottom: 1px solid black;">0% (0/0)</td>
+                <td data-reactid=".1.1.0.0:3" style="border-bottom: 1px solid black;">0% (0/0)</td>
+                <td data-reactid=".1.1.0.0:4" style="border-bottom: 1px solid black;">0% (0/0)</td>
+                <td data-reactid=".1.1.0.0:5" style="border-bottom: 1px solid black; border-right: 1px solid black;">0% (0/0)</td>
+            </tr>
+            <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+
+				<tr class="row even" role="row">
+
+					<td class="smallish centeralign">
+						Round 3
+						Flt 2
+					</td>
+
+					<td class="smallish leftalign">
+						<span class="leftalign" style="min-width: 75%;">
+
+							Sat 9:50 AM
+						</span>
+					</td>
+
+					<td class="leftalign padleft padvertless limit3 wrap">
+
+								B127
+
+					</td>
+
+
+						<td class="smallish centeralign">
+							Con
+
+						</td>
+
+						<td class="smallish">
+							Sphoorthi Gurram
+						</td>
+
+
+					<td class="smallish nospace">
+
+
+								<div class="full nospace flexrow">
+
+								<span class="threesevenths nowrap padvert marvertno smallish padleft" title="Kapoor, Atul">
+										<span class="fifth centeralign nospace" title="Paradigm">
+											<a class="greytext buttonwhite smaller padmuchless marno" target="_blank" href="/index/paradigm.mhtml?judge_person_id=359035">P</a>
+										</span>
+									Kapoor, Atul
+								</span>
+
+
+									<span class="ltborderright ltborderleft foursevenths nospace">
+
+											<span class="sixth marno semibold centeralign nospace">
+												W
+											</span>
+
+											<span class="threefifths nospace rightalign">
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																NC
+															</span>
+															<span class="third nospace smaller">
+																28.6
+															</span>
+															<span class="third nospace">
+																1
+																
+															</span>
+														</span>
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																SK
+															</span>
+															<span class="third nospace smaller">
+																28.3
+															</span>
+															<span class="third nospace">
+																3
+																
+															</span>
+														</span>
+											</span>
+
+											<span class="eighth leftalign hover marno padno centeralign">
+												<a class="bluetext marno fa fa-tiny padmuchless fa-file-text-o full padvert" target="_blank" title="RFD, Comments and Feedback" onclick="toggleView('7067324_feedback', 'feedback');"></a>
+											</span>
+
+
+								</span></div>
+					</td>
+
+
+				</tr>
+				<tr class="row odd" role="row">
+
+					<td class="smallish centeralign">
+						Round 2
+						Flt 1
+					</td>
+
+					<td class="smallish leftalign">
+						<span class="leftalign" style="min-width: 75%;">
+
+							Fri 7:30 PM
+						</span>
+					</td>
+
+					<td class="leftalign padleft padvertless limit3 wrap">
+
+								B111
+
+					</td>
+
+
+						<td class="smallish centeralign">
+							Pro
+
+						</td>
+
+						<td class="smallish">
+							Flower Mound BK
+						</td>
+
+
+					<td class="smallish nospace">
+
+
+								<div class="full nospace flexrow">
+
+								<span class="threesevenths nowrap padvert marvertno smallish padleft" title="Kang, Sheen">
+										<span class="fifth centeralign nospace" title="Paradigm">
+											<a class="greytext buttonwhite smaller padmuchless marno" target="_blank" href="/index/paradigm.mhtml?judge_person_id=615679">P</a>
+										</span>
+									Kang, Sheen
+								</span>
+
+
+									<span class="ltborderright ltborderleft foursevenths nospace">
+
+											<span class="sixth marno semibold centeralign nospace">
+												L
+											</span>
+
+											<span class="threefifths nospace rightalign">
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																NC
+															</span>
+															<span class="third nospace smaller">
+																26
+															</span>
+															<span class="third nospace">
+																4
+																
+															</span>
+														</span>
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																SK
+															</span>
+															<span class="third nospace smaller">
+																28
+															</span>
+															<span class="third nospace">
+																2
+																
+															</span>
+														</span>
+											</span>
+
+											<span class="eighth leftalign hover marno padno centeralign">
+												<a class="bluetext marno fa fa-tiny padmuchless fa-file-text-o full padvert" target="_blank" title="RFD, Comments and Feedback" onclick="toggleView('7066403_feedback', 'feedback');"></a>
+											</span>
+
+
+								</span></div>
+					</td>
+
+
+				</tr>
+				<tr class="row even" role="row">
+
+					<td class="smallish centeralign">
+						Round 1
+						Flt 2
+					</td>
+
+					<td class="smallish leftalign">
+						<span class="leftalign" style="min-width: 75%;">
+
+							Fri 5:50 PM
+						</span>
+					</td>
+
+					<td class="leftalign padleft padvertless limit3 wrap">
+
+								B111
+
+					</td>
+
+
+						<td class="smallish centeralign">
+							Pro
+
+						</td>
+
+						<td class="smallish">
+							Jasper QB
+						</td>
+
+
+					<td class="smallish nospace">
+
+
+								<div class="full nospace flexrow">
+
+								<span class="threesevenths nowrap padvert marvertno smallish padleft" title="McNamee, Jonathan">
+										<span class="fifth centeralign nospace" title="Paradigm">
+											<a class="greytext buttonwhite smaller padmuchless marno" target="_blank" href="/index/paradigm.mhtml?judge_person_id=71147">P</a>
+										</span>
+									McNamee, Jonathan
+								</span>
+
+
+									<span class="ltborderright ltborderleft foursevenths nospace">
+
+											<span class="sixth marno semibold centeralign nospace">
+												L
+											</span>
+
+											<span class="threefifths nospace rightalign">
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																NC
+															</span>
+															<span class="third nospace smaller">
+																27.7
+															</span>
+															<span class="third nospace">
+																4
+																
+															</span>
+														</span>
+														<span class="full padno padvertless leftalign marno nowrap">
+															<span class="third padno marno smaller">
+																SK
+															</span>
+															<span class="third nospace smaller">
+																27.8
+															</span>
+															<span class="third nospace">
+																3
+																
+															</span>
+														</span>
+											</span>
+
+											<span class="eighth leftalign hover marno padno centeralign">
+												<a class="bluetext marno fa fa-tiny padmuchless fa-file-text-o full padvert" target="_blank" title="RFD, Comments and Feedback" onclick="toggleView('7064920_feedback', 'feedback');"></a>
+											</span>
+
+
+								</span></div>
+					</td>
+
+
+				</tr>
+
+			</tbody>
+		</table><div class="tablesorter-sticky-wrapper tablesorter-sticky-hidden" style="position: fixed; top: 0px; left: 122.375px; visibility: hidden; z-index: 2; width: 912.938px;"><table id="5459469-sticky" class="tablesorter tablesorter-default tablesorter00e8ff1b54476 containsStickyHeaders tablesorter-stickyHeader tablesorter00e8ff1b54476_extra_table" role="grid" style="height: 0px; width: 912.938px; margin: 0px; min-width: 912.938px; max-width: 912.938px;">
+			<thead>
+				<tr class="smallish semibold yellowrow tablesorter-headerRow" role="row">
+
+					<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted tablesorter00e8ff1b54476_extra_headers" data-column="0" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Round: No sort applied, activate to apply a descending sort" style="user-select: none; width: 98.5625px; min-width: 98.5625px; max-width: 98.5625px;"><div class="tablesorter-header-inner">
+						Round
+					</div></th>
+
+					<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted tablesorter00e8ff1b54476_extra_headers" data-column="1" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Start: No sort applied, activate to apply a descending sort" style="user-select: none; width: 68.125px; min-width: 68.125px; max-width: 68.125px;"><div class="tablesorter-header-inner">
+						Start
+					</div></th>
+
+					<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted tablesorter00e8ff1b54476_extra_headers" data-column="2" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Room: No sort applied, activate to apply a descending sort" style="user-select: none; width: 159px; min-width: 159px; max-width: 159px;"><div class="tablesorter-header-inner">
+						Room
+					</div></th>
+
+						<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted tablesorter00e8ff1b54476_extra_headers" data-column="3" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Side: No sort applied, activate to apply a descending sort" style="user-select: none; width: 51.2031px; min-width: 51.2031px; max-width: 51.2031px;"><div class="tablesorter-header-inner">
+							Side
+						</div></th>
+
+						<th class="smallish tablesorter-header sortable tablesorter-headerUnSorted tablesorter00e8ff1b54476_extra_headers" data-column="4" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Opponent: No sort applied, activate to apply a descending sort" style="user-select: none; width: 111.188px; min-width: 111.188px; max-width: 111.188px;"><div class="tablesorter-header-inner">
+							Opponent
+						</div></th>
+
+
+					<th class="smallish nosort tablesorter-header sortable tablesorter-headerUnSorted tablesorter00e8ff1b54476_extra_headers" data-column="5" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="5459469" unselectable="on" aria-sort="none" aria-label="Judges
+						
+						
+							Results/Comments: No sort applied, activate to apply a descending sort" style="user-select: none; width: 262.812px; min-width: 262.812px; max-width: 262.812px;"><div class="tablesorter-header-inner">
+						<span class="threesevenths">
+							Judges
+						</span>
+						<span class="foursevenths">
+							Results/Comments
+						</span>
+					</div></th>
+
+
+				</tr>
+			</thead>
+
+			
+		</table></div>
+
+
+				<div class="feedback full bluebordertop 7073965_feedback hidden">
+
+				<span class="half nospace">
+					<h5>Wevodau, Aidan</h5>
+				</span>
+
+					<span class="half nospace rightalign">
+						<h6>Round 4 Feedback</h6>
+					</span>
+
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Reason for Rank/Decision</p>
+							<span class="ninetenths padleftmore">
+								<p>Voted on C2 economy, while not probable it is the largest impact left in the round. Terrorism evidence did not support the wider impacts of regional war or large attack form isis and instead was focused on domestic terrorism. While still a strong impact it does not outweigh Recession even with such a low probablility.</p>
+							</span>
+						</div>
+
+
+
+				</div>
+
+
+				<div class="feedback full bluebordertop 7067324_feedback hidden">
+
+				<span class="half nospace">
+					<h5>Kapoor, Atul</h5>
+				</span>
+
+					<span class="half nospace rightalign">
+						<h6>Round 3 Feedback</h6>
+					</span>
+
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Reason for Rank/Decision</p>
+							<span class="ninetenths padleftmore">
+								<p>I voted for Hebron on Con.</p>
+<p>Both teams presented strong arguments for their respective positions.</p>
+<p>Prosper's Pro case was based on the sole contention of Moderation, and the sub-points were Trafficking and Genocide.</p>
+<p>Hebron's Con case was based on the contention of Court Clog and the Economy.</p>
+<p>On balance, I found the logic presented by Hebron was more clearly communicated and supported more effectively by specific references. They provided a better comparison for their argument and that Economic impacts outweigh. Their contention that the usage of AI for moderation would exist in both world's. For Prosper, their arguments on trafficking and genocide were good and should have been supported with better evidence, and how in their world repealing could solve thru' immediacy.</p>
+<p>I found Hebron's argument to be more compelling and hence I voted for them.</p>
+							</span>
+						</div>
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Comments for you</p>
+							<span class="ninetenths padleftmore">
+								<p>Post round feedback provided.</p>
+<p>A stronger Final focus that reiterates the argument and the comparison. Summarize why the judge should vote for you.</p>
+							</span>
+						</div>
+
+
+				</div>
+
+
+				<div class="feedback full bluebordertop 7066403_feedback hidden">
+
+				<span class="half nospace">
+					<h5>Kang, Sheen</h5>
+				</span>
+
+					<span class="half nospace rightalign">
+						<h6>Round 2 Feedback</h6>
+					</span>
+
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Reason for Rank/Decision</p>
+							<span class="ninetenths padleftmore">
+								<p>I chose Flower Mound BK team because they really scored a big point with the terrorism argument. Summary is the most important in the round. Con re-state the strong points and claims of their team.</p>
+<p></p>
+<p></p>
+							</span>
+						</div>
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Comments for you</p>
+							<span class="ninetenths padleftmore">
+								<p>Striker Kotha:</p>
+<ul>
+<li>Have a good posture.</li>
+<li>Use body language while talking.</li>
+<li>Demonstrate comprehension of the resolution.</li>
+<li>Big fan of organized speeches, good job</li>
+</ul>
+<p>Nissan Chatha:</p>
+<ul>
+<li>I prefer if you clash the arguments of the opposing team on rebuttal over you adding information.</li>
+<li>Try to clash all of the opponent’s arguments.</li>
+<li>If any argument is not blocked, the point under that aspect will be given to your opponent.</li>
+</ul>
+							</span>
+						</div>
+
+
+				</div>
+
+
+				<div class="feedback full bluebordertop 7064920_feedback hidden">
+
+				<span class="half nospace">
+					<h5>McNamee, Jonathan</h5>
+				</span>
+
+					<span class="half nospace rightalign">
+						<h6>Round 1 Feedback</h6>
+					</span>
+
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Reason for Rank/Decision</p>
+							<span class="ninetenths padleftmore">
+								<p>I do think have a clear unpacking of what section 230 is played out in the outcome of the debate. I do think neg was the side that clearly showed me why supporting aff would lead to more harms than what the aff attempts to prove. I do think aff did not really clash enough and engage with what the neg was saying and made it hard to see why I should vote for the aff. I think the biggest weighing/strongest argument in the debate was the idea of increase of moderation would potentially not be possible and actually would have econ negative impacts which the aff never addresses. I think focusing too much on the principle aspect and mostly defending in the debate was the big strategic issue of the aff. If there is no clear benefit for affirming the resolution, I think neg at least gives me rationale and analysis to potential harms to removing section 230.</p>
+							</span>
+						</div>
+
+						<div class="full ltbordertop padvert">
+							<p class="bluetext semibold bigger">Comments for you</p>
+							<span class="ninetenths padleftmore">
+								<p>1st speaker - I think the first con had a lot of great principle arguments, but would have loved more linking back to the relevance to the resolution because at times it felt like it got lost. That sub point b could have had a bit more cleaned up because it was super wordy and forced you to have to rush through that second contention and we need equal time to both to help give more depth to the aff foundation to build off in the debate. If you are unsure how to respond to a question, ask them to restate it or find a way to link it to information you know for a fact.</p>
+<p>2nd speaker - The response to companies needing to increase moderation was an entire section of their contention on the downsides of this. You need to outweigh and show us why we buy into your analysis over theres and not just say "they will just have to invest more into it." What is the goal of the engagement with the small business impact? I would have loved more weighing here to show me why this is not important into the debate, which you kind of address but not get to the core issues enough. You could have extend more of your side in the debate because you only spent about 20 seconds to show me why we should affirm.</p>
+<p>Summary - Why is dropping your sub b potentially lead to me having to vote aff? You never tell us WHY this is crucial to the debate and how you want to use it to summarize the debate. I think the speech just needed more clarity on what you want us to take away from the debate. How are you outweighing? Why should we vote for your side? You need to clearly articulate in this speech, what happened in the debate and go down each side to show us what the higher end issues are. Careful with too many loaded arguments back to back that do not have a clear evidence or connection back to what was said in the debate.</p>
+<p>Careful in the FF just extending the same arguments and not applying them in a way that clearly shows me how the aff outweighs and what you feel we should vote on. You should just extract the things you feel you engaged with the most and has the most persuasiveness to a judge.</p>
+							</span>
+						</div>
+
+
+				</div>
+
+
+		</div>
+
+
+
+
+	</div>
+
+		</div>
+	</div>
+			<div id="footer">
+				<span class="leftlinks twothirds">
+					<a tabindex="-1" href="https://www.speechanddebate.org/join">Join the NSDA</a>
+
+					<a tabindex="-1" href="https://www.speechanddebate.org/mission">About</a>
+
+					<a tabindex="-1" href="mailto:help@tabroom.com">Help</a>
+
+					<a tabindex="-1" href="https://www.tabroom.com/index/about.mhtml">Contact</a>
+
+					<a tabindex="-1" href="https://www.speechanddebate.org/privacy-policy">Privacy Policy</a>
+
+					<a tabindex="-1" href="https://www.speechanddebate.org/terms-conditions">Terms</a>
+				</span>
+
+
+			</div>
+		</div>
+
+		
+
+
+
+	
+
+
+
+<div class="alertify-notifier ajs-bottom ajs-left"></div></body></html>
