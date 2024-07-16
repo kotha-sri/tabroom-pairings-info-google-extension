@@ -1,9 +1,15 @@
-// TODO: clean up code, then add try/catch errors ("https://www.w3schools.com/js/js_errors.asp")
-    // add entries json and tournament name to chrome.storage.local - check if the tournament in there is the same
-    // as the current one, and if so then we can pull record links from there, else scrape it and save
+// TODO:
+//  - collapsible paradigms
+//  - adapt calculateRecord to add novice division as well
+//  - save entries of the tournament to storage
+//  - save the latest pairing to storage 
+//  - support swing tournaments
+//  - before publishing, add something that will email any errors (set up a new email, srikar.kotha.dev@gmail.com or something)
 
 // global variables
 const parser = new DOMParser()
+const colSpan = document.getElementsByClassName("full nospace martop dkborderbottom marbottommuchmore padleft")[0].getElementsByTagName('tr')[0].children.length // makes it so that despite varying number of columns, all embedded rows look flush in the table
+
 
 // helper functions
 function HTMLTableToJSON(table) {
@@ -43,7 +49,9 @@ function getParadigmLinks() {
     Array.from(judgeDivs).forEach(judge => {
         let name = judge.getElementsByClassName("threesevenths nowrap padvert marvertno smallish padleft")[0].title
         const paradgimLink = judge.getElementsByClassName("greytext buttonwhite smaller padmuchless marno")[0].href
-        name = name.split(",").reverse().join(" ").trim() // converting from name "Last, First" to "First Last" without whitespace
+        try {
+            name = name.split(",").reverse().join(" ").trim() // converting from name "Last, First" to "First Last" without whitespace
+        } catch(error) {console.log(error)}
         links.push([name, paradgimLink])
     })
     return links
@@ -59,34 +67,27 @@ async function getParadigmContent(paradigmLink) {
 
 async function formatJudgeContent(judgeArray) {
     let content = ``
+    let oddEven = 0
     for(let i = 0; i < judgeArray.length; i++) {
         const judge = judgeArray[i]
         let easterEgg = ""
         if(judge[0] == "Measam Ali") {easterEgg = "<--- please read his paradigm, he gets sad if you don't"}
         content += `
-            <tr id="${judge[0]} header">
-                <td colspan="6" style="margin: 0px; padding: 0px;">
-                    <p class="biggish semibold" style="background-color: indianred; margin-bottom: 0px; border: 1px solid black; margin: 0px; padding: 4px; font-size: 16px">
-                        ${judge[0]} Paradigm
-                    </p>
-                </td>
+            <tr id="${judge[0]} header" class="yellowrow" style="height: 22px; font-size:12px; border: 1px solid white;">
+                <td colspan="${colSpan}" style="font-weight: 600; padding: 4px; padding-left: 8px; font-size:12px; border-top: 1px solid white; border-left: 1px solid white;">${judge[0]} Paradigm ${easterEgg}</td>
             </tr>
 
-            <tr id="${judge[0]} paradigm" style="border: 5px;border-color: #ddff00;height: 300px;">
-                <td colspan="6" style="padding: 0px; display: none;">
-                    <div class="paradigm ltborderbottom" style="padding: 0px;height: 300px;overflow: auto;background-color: #ff98b0; border: 1px solid black;">
+            <tr id="${judge[0]} paradigm" style="border: 5px;border-color: #ddff00;">
+                <td colspan="${colSpan}" style="padding: 0px;">
+                    <div class="paradigm ltborderbottom" style="padding: 0px;max-height: 300px;overflow: auto;background-color: #fafafa; border: 1px solid white;">
                         ${await getParadigmContent(judge[1])} ${easterEgg}
                     </div>
                 </td>
             </tr>
 
+            
+
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
             </tr>
         `
@@ -101,13 +102,14 @@ async function formatJudgeContent(judgeArray) {
 
 // the div below is a simply blank one for now
 const placeholderOpponentRecord = `
-    <tr data-reactid=".1.1.0">
-        <td data-reactid=".1.1.0.0:0">Totals</td>
-        <td data-reactid=".1.1.0.0:1">0% (0/0)</td>
-        <td data-reactid=".1.1.0.0:2">0% (0/0)</td>
-        <td data-reactid=".1.1.0.0:3">0% (0/0)</td>
-        <td data-reactid=".1.1.0.0:4">0% (0/0)</td>
-        <td data-reactid=".1.1.0.0:5">0% (0/0)</td>
+    <tr style="background-color: #fafafa; font-size: 12px" data-reactid=".1.1.0">
+        <td colspan="${colSpan-6}" style="border-left: 1px solid white; border-bottom: 1px solid white;" data-reactid=".1.1.0.0:0">Totals</td>
+        <td style="border-bottom: 1px solid white;" data-reactid=".1.1.0.0:1">0% (0/0)</td>
+        <td style="border-bottom: 1px solid white;" data-reactid=".1.1.0.0:2">0% (0/0)</td>
+        <td style="border-bottom: 1px solid white;" data-reactid=".1.1.0.0:3">0% (0/0)</td>
+        <td style="border-bottom: 1px solid white;" data-reactid=".1.1.0.0:4">0% (0/0)</td>
+        <td style="border-right: 1px solid white; border-bottom: 1px solid white;"data-reactid=".1.1.0.0:5">0% (0/0)</td>
+        
     </tr>
 `
 function getOpponentName() {
@@ -117,99 +119,162 @@ function getOpponentName() {
     return row[oppIndex].innerText
 }
 
-function getTournName() {
-    return document.querySelector("h5.martopmore").textContent.trim()
-}
+// function getTournName() {
+//     return document.querySelector("h5.martopmore").textContent.trim()
+// }
 
-async function getEventEntriesURL() {
-    // tourn name
-    const tournName = getTournName()
+// async function getEventEntriesURL() {
+//     // tourn name
+//     const tournName = getTournName()
 
-    // tourn id
-    const searchURL = `https://www.tabroom.com/index/search.mhtml?search=$${tournName.replaceAll(" ", "%20")}&caller=%2Findex%2Findex.mhtml` // 
-    const searchPage = await fetch(searchURL)
-    const tournIDHTML = await searchPage.text()
-    const tournURL = parser.parseFromString(tournIDHTML, "text/html").getElementById("search_results").getElementsByTagName("a")[0].href
-    const tournID = /tourn_id=(.*)/gm.exec(tournURL)[1]
+//     // tourn id
+//     const searchURL = `https://www.tabroom.com/index/search.mhtml?search=$${tournName.replaceAll(" ", "%20")}&caller=%2Findex%2Findex.mhtml` // 
+//     const searchPage = await fetch(searchURL)
+//     const tournIDHTML = await searchPage.text()
+//     const tournURL = parser.parseFromString(tournIDHTML, "text/html").getElementById("search_results").getElementsByTagName("a")[0].href
+//     const tournID = /tourn_id=(.*)/gm.exec(tournURL)[1]
 
-    // event name
-    const eventPageText = document.getElementsByClassName("full graytext semibold bigger")[0].innerText
-    const eventName = /Entry in (.*) \(.*\)/gm.exec(eventPageText)[1]
+//     // event name
+//     const eventPageText = document.getElementsByClassName("full graytext semibold bigger")[0].innerText
+//     const eventName = /Entry in (.*) \(.*\)/gm.exec(eventPageText)[1]
 
-    // entry page (with record links) link
-    const entriesURL = `https://www.tabroom.com/index/tourn/fields.mhtml?tourn_id=${tournID}`
-    const entriesPage = await fetch(entriesURL)
-    const entryIDHTML = await entriesPage.text()
-    const sidenote = parser.parseFromString(entryIDHTML, "text/html").getElementsByClassName("sidenote")[0]
-    let link = ""
-    sidenote.querySelectorAll('a').forEach(a => {
-        if (a.innerText.trim() == eventName){
-            link = a.href
+//     // entry page (with record links) link
+//     const entriesURL = `https://www.tabroom.com/index/tourn/fields.mhtml?tourn_id=${tournID}`
+//     const entriesPage = await fetch(entriesURL)
+//     const entryIDHTML = await entriesPage.text()
+//     const sidenote = parser.parseFromString(entryIDHTML, "text/html").getElementsByClassName("sidenote")[0]
+//     let link = ""
+//     sidenote.querySelectorAll('a').forEach(a => {
+//         if (a.innerText.trim() == eventName){
+//             link = a.href
+//         }
+//     })
+//     return link
+// }
+
+async function calculateRecord(recordLink) {
+    // const response = await fetch(recordLink)
+    // const html = await response.text()
+    // const currentRecord = JSON.parse("{" + /\"together-this_yr-open":\{[^}]*\}/gm.exec(html)[0] + "}")
+
+    // records are empty, so no one has a "together-this_yr-open" yet
+
+    const currentRecord = {
+        "together-this_yr-open": {
+          "elim_ballots": 11,
+          "elim_ballots_won": 5,
+          "elim_rounds": 5,
+          "elim_wins": 2,
+          "level": "Open",
+          "prelim_ballots": 62,
+          "prelim_ballots_won": 28,
+          "prelim_rounds": 62,
+          "prelim_wins": 28
         }
-    })
-    return link
+    }["together-this_yr-open"]
+    
+    const prelim_rounds = currentRecord["prelim_rounds"]
+    const prelim_wins = currentRecord["prelim_wins"]
+    const prelim_ballots = currentRecord["prelim_ballots"]
+    const prelim_ballots_won = currentRecord["prelim_ballots_won"]
+    const elim_rounds = currentRecord["elim_rounds"]
+    const elim_wins = currentRecord["elim_wins"]
+    const elim_ballots = currentRecord["elim_ballots"]
+    const elim_ballots_won = currentRecord["elim_ballots_won"]
+    const totalRounds = prelim_rounds + elim_rounds
+    const totalWins = prelim_wins + elim_wins
+
+    return `
+        <tr style="font-size:12px;background-color: #fafafa; border: 1px solid white;">
+            <td style="heightborder-bottom: 1px solid white; border-left: 1px solid white;">Totals</td>
+            <td style="border-bottom: 1px solid white;">${(prelim_wins / prelim_rounds * 100).toFixed(1)}% (${prelim_wins}/${prelim_rounds})</td>
+            <td style="border-bottom: 1px solid white;">${(prelim_ballots_won / prelim_ballots * 100).toFixed(1)}% (${prelim_ballots_won}/${prelim_ballots})</td>
+            <td style="border-bottom: 1px solid white;">${(elim_wins / elim_rounds * 100).toFixed(1)}% (${elim_wins}/${elim_rounds})</td>
+            <td style="border-bottom: 1px solid white;">${(elim_ballots_won / elim_ballots * 100).toFixed(1)}% (${elim_ballots_won}/${elim_ballots})</td>
+            <td style="border-bottom: 1px solid white; border-right: 1px solid white;">${(totalWins / totalRounds * 100).toFixed(1)}% (${totalWins}/${totalRounds})</td>
+        </tr>
+    `
 }
 
 // returns html
-async function getOpponentRecord(opponentName) {
-    let opponentRecordLink = ""
-    let records = await chrome.storage.local.get(["entries"])
-    records = JSON.parse(JSON.stringify(records))["entries"]
+async function getOpponentRecord(opponentCode) {
+    // let opponentRecordLink = ""
+    // let records = await chrome.storage.local.get(["entries"])
+    // records = JSON.parse(JSON.stringify(records))["entries"]
     
-    if (records == "") {
-        loadEntries()
-    }
-    
-    // magic magic magic get record
+    // if (records == "") {
+    //     loadEntries()
+    // }
 
-    // until the magic is uncovered,
-    return placeholderOpponentRecord
+    return calculateRecord()
 }
 
 // loads entries to chrome.storage.local so it's faster and less intensive to retrieve
-async function loadEntries(entryPage) {
-    const response = await fetch(entryPage)
-    const html = await response.text()
-    const table = parser.parseFromString(html, "text/html").getElementById("fieldsort")
-    let entriesJSON = tableToJSON(table)
-    entriesJSON = cleanEntryJSON(entriesJSON)
-    chrome.storage.local.set({ "entries" : entriesJSON }).then(() => {
-        console.log(`entries loaded into local storage`);
-    });   
-}
+// async function loadEntries(entryPage) {
+//     const response = await fetch(entryPage)
+//     const html = await response.text()
+//     const table = parser.parseFromString(html, "text/html").getElementById("fieldsort")
+//     let entriesJSON = tableToJSON(table)
+//     entriesJSON = cleanEntryJSON(entriesJSON)
+//     chrome.storage.local.set({ "entries" : entriesJSON }).then(() => {
+//         console.log(`entries loaded into local storage`);
+//     });   
+// }
 
 // returns a JSON from the whole entry table to just the opponent name paired to their record link
-function cleanEntryJSON(entriesJSON) { 
-    let clean = {}
-    entriesJSON.forEach(entry => {
-        recordTag = parser.parseFromString(entry["\n\t\t\t\t\t\t\t\trecord\n\t\t\t\t\t\t\t"], "text/html") // weird record format cause thats how it is in the html
-        const recordLink = recordTag.querySelector("a").href
-        clean[entry["\n\t\t\t\t\t\t\tcode\n\t\t\t\t\t\t"].trim()] = recordLink
-    })
-    return clean
-}
+// function cleanEntryJSON(entriesJSON) { 
+//     let clean = {}
+//     entriesJSON.forEach(entry => {
+//         recordTag = parser.parseFromString(entry["\n\t\t\t\t\t\t\t\trecord\n\t\t\t\t\t\t\t"], "text/html") // weird record format cause thats how it is in the html
+//         const recordLink = recordTag.querySelector("a").href
+//         clean[entry["\n\t\t\t\t\t\t\tcode\n\t\t\t\t\t\t"].trim()] = recordLink
+//     })
+//     return clean
+// }
 
+function formatOpponentContent(opponentCode, opponentRecord) {
+    // TODO: change the record (last table row element) to getOpponentRecord(opponentCode)
+    let easterEgg = ""
+    if(opponentCode == ("Hebron CK")) {
+        easterEgg = "<---- hey that's me"
+    } else if (opponentCode.includes("Hebron")) {easterEgg = "<----- Hawk Pride Never Dies"}
+
+    return `
+        <tr class="yellowrow" style="height: 22px; font-size:12px; border: 1px solid white;">
+                <td colspan="${colSpan}" style="font-weight: 600; padding: 4px; padding-left: 8px; font-size:12px; border-top: 1px solid white; border-left: 1px solid white;">${opponentCode} Record ${easterEgg}</td>
+        </tr>
+
+        <tr class="yellowrow" style="font-weight: 600; height: 22px; padding: 4px; padding-left: 8px; font-size:12px; border: 1px solid white;">
+            <td style="height: 22px; padding: 4px; padding-left: 8px; border-top: 1px solid white; border-left: 1px solid white;">Comparison</td>
+            <td style="height: 22px; padding: 4px; padding-left: 8px; border-top: 1px solid white;">Prelim Rds</td>
+            <td style="height: 22px; padding: 4px; padding-left: 8px; border-top: 1px solid white;">Prelim Ballots</td>
+            <td style="height: 22px; padding: 4px; padding-left: 8px; border-top: 1px solid white;">Elim Rds</td>
+            <td style="height: 22px; padding: 4px; padding-left: 8px; border-top: 1px solid white;">Elim Ballots</td>
+            <td style="height: 22px; padding: 4px; padding-left: 8px; border-top: 1px solid white; border-right: 1px solid white;">Total</td>
+        </tr>
+            ${opponentRecord}
+        </tr>
+        <tr>
+            <td></td>
+
+        </tr>
+    `
+}
 
 //---------------------------------------FORMATTING AND INSERTING---------------------------------------
 
 // for testing/example, has Measam paradigm and empty record (Hebron FW cause they're the opps)
 const exampleInsertContent = `<tr>
    <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
 </tr>
 <tr>
-   <td colspan="6" style="margin: 0px; padding: 0px;">
+   <td colspan="${colSpan}" style="margin: 0px; padding: 0px;">
       <p class="biggish semibold" style="background-color: indianred; margin-bottom: 0px; border: 1px solid black; margin: 0px; padding: 4px; font-size: 16px">Measam Ali Paradigm</p>
    </td>
 </tr>
 <tr style="border: 5px;border-color: #ddff00;height: 300px;">
-   <td colspan="6" style="padding: 0px;">
-      <div class="paradigm ltborderbottom" style="padding: 0px;height: 300px;overflow: auto;background-color: #ff98b0; border: 1px solid black;">
+   <td colspan="${colSpan}" style="padding: 0px;">
+      <div class="paradigm" style="padding: 0px;height: 300px;overflow: auto;background-color: #ff98b0; border: 1px solid black;">
          <p><em><strong><span style="font-size: 10pt;"><em><strong>***For all of the lifetime of this page, this page will be a work in progress (W.I.P)***</strong></em></span></strong></em></p>
          <p><em><strong><span style="font-size: 10pt;"><em><strong>**Up to date for Plano West TFA (09/09/2023) still subject to change through the event**</strong></em></span></strong></em></p>
          <p><strong>Hiii Everyone!!!</strong></p>
@@ -261,15 +326,9 @@ const exampleInsertContent = `<tr>
 </tr>
 <tr>
    <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
 </tr>
 <tr style="margin: 0px;">
-   <td colspan="6" style="margin: 0px; padding: 0px;">
+   <td colspan="${colSpan}" style="margin: 0px; padding: 0px;">
       <p class="biggish semibold" style="background-color: #f2b3f5; margin-bottom: 0px; border: 1px solid black;margin: 0px;padding: 4px; font-size: 16px">Hebron FW Record</p>
    </td>
 </tr>
@@ -291,12 +350,6 @@ const exampleInsertContent = `<tr>
 </tr>
 <tr>
    <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
-   <td></td>
 </tr>
 `
 
@@ -305,12 +358,6 @@ const exampleInsertContent = `<tr>
 function createInsertContent(judgeContent, opponentContent) {
     return `
         <tr style="background-color: white;">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
         <td></td>
         </tr>
 
@@ -321,43 +368,11 @@ function createInsertContent(judgeContent, opponentContent) {
 
         <tr style="background-color: white;">
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
         </tr>
     `
 }
 
-function formatOpponentContent(opponentName, opponentRecord) {
-    // TODO: change the record (last table row element) to getOpponentRecord(opponentName)
-    let easterEgg = ""
-    if(opponentName == ("Hebron CK")) {
-        easterEgg = "<---- hey that's me"
-    } else if (opponentName.includes("Hebron")) {easterEgg = "<----- Hawk Pride Never Dies"}
 
-    return `
-        <tr style="margin: 0px;">
-            <td colspan="6" style="margin: 0px; padding: 0px;">
-                <p class="biggish semibold" style="background-color: #f2b3f5; margin-bottom: 0px; border: 1px solid black;margin: 0px;padding: 4px; font-size: 16px">
-                    ${opponentName} Record ${easterEgg}
-                </p>
-            </td>
-        </tr>
-        <tr class="yellowrow" data-reactid=".1.0.0" style="font-size:12px; border: 1px solid black;">
-            <th data-reactid=".1.0.0.$Comparison" style="font-size:12px; border-top: 1px solid black; border-left: 1px solid black;">Comparison</th>
-            <th data-reactid=".1.0.0.$Prelim Rds" style="font-size:12px; border-top: 1px solid black;">Prelim Rds</th>
-            <th data-reactid=".1.0.0.$Prelim Ballots" style="font-size:12px; border-top: 1px solid black;">Prelim Ballots</th>
-            <th data-reactid=".1.0.0.$Elim Rds" style="font-size:12px; border-top: 1px solid black;">Elim Rds</th>
-            <th data-reactid=".1.0.0.$Elim Ballots" style="font-size:12px; border-top: 1px solid black;">Elim Ballots</th>
-            <th data-reactid=".1.0.0.$Total" style="font-size:12px; border-top: 1px solid black; border-right: 1px solid black;">Total</th>
-        </tr>
-            ${opponentRecord}
-        </tr>
-    `
-}
 
 // inserts the formatted content into the webpage
 function insertHTML(html) {
@@ -370,168 +385,67 @@ function insertHTML(html) {
 // allows us to use await, so the code will only execute after the Promise has been resolved
 async function everythingEverywhereAllAtOnce() {
 
-    const opponentName = getOpponentName()
-    const paradgimLinks = getParadigmLinks()
-    // for when calculating records has been discovered
+    let judgeContent
+    try {
+        const paradgimLinks = getParadigmLinks()
+        judgeContent = await formatJudgeContent(paradgimLinks)
+    } catch(error) {
+        console.log(error)
+        judgeContent = `
+            <tr>
+                <td colspan="${colSpan}" style="margin: 0px; padding: 0px;">
+                    <p class="biggish semibold" style="background-color: #ffbdbd; margin-bottom: 0px; border: 1px solid white; margin: 0px; padding: 4px; font-size: 14px">
+                        404 Paradigm Not Found
+                    </p>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        `
+    }
+    
+    // for when calculating records has been uncovered
     // const entryPage = await getEventEntriesURL()
     
-    // html of opponent record
-    const opponentRecord = await getOpponentRecord(opponentName)
+    let opponentContent
+    try {
+        const opponentCode = getOpponentName()
+        const opponentRecord = await getOpponentRecord(opponentCode)
+        opponentContent = formatOpponentContent(opponentCode, opponentRecord)
+    } catch (error) {
+        console.log(error)
+        opponentContent = `
+            <tr>
+                <td colspan="${colSpan}" style="margin: 0px; padding: 0px;">
+                    <p class="biggish semibold" style="background-color: #ffbdbd; margin-bottom: 0px; border: 1px solid white; margin: 0px; padding: 4px; font-size: 14px">
+                        404 Record Not Found
+                    </p>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        `
+    }
     
-    const judgeContent = await formatJudgeContent(paradgimLinks)
-    const opponentContent = formatOpponentContent(opponentName, opponentRecord)
     const insertContent = createInsertContent(judgeContent, opponentContent)
 
     insertHTML(insertContent)
 }
 
 everythingEverywhereAllAtOnce()
-
-
-//---------------------------------------TESTING RECORD CALCULATION---------------------------------------
-// testing record calc
-function MakeArray(strDummy) {
-
-    var prelim_wins        = 0;
-    var prelim_rounds      = 0;
-    var elim_wins          = 0;
-    var elim_rounds        = 0;
-    var prelim_ballots     = 0;
-    var prelim_ballots_won = 0;
-    var elim_ballots       = 0;
-    var elim_ballots_won   = 0;
-    var myArray            = [];
-    var x                  = 0;
-
-    for (var row in summaryTable) {
-
-        if ( row.indexOf(strDummy) !== -1 ) {
-
-            prelim_wins += killNulls(summaryTable[row]['prelim_wins']);
-            prelim_rounds += killNulls(summaryTable[row]['prelim_rounds']);
-            prelim_ballots += killNulls(summaryTable[row]['prelim_ballots']);
-            prelim_ballots_won += killNulls(summaryTable[row]['prelim_ballots_won']);
-
-            elim_wins += killNulls(summaryTable[row]['elim_wins']);
-            elim_rounds += killNulls(summaryTable[row]['elim_rounds']);
-            elim_ballots += killNulls(summaryTable[row]['elim_ballots']);
-            elim_ballots_won += killNulls(summaryTable[row]['elim_ballots_won']);
-
-            var allwins = killNulls(summaryTable[row]['elim_wins']) + killNulls(summaryTable[row]['prelim_wins']);
-            var allrounds = killNulls(summaryTable[row]['elim_rounds']) + killNulls(summaryTable[row]['prelim_rounds']);
-
-            myArray.push({
-                "Comparison"     : summaryTable[row]['level'],
-                "Prelim Rds"     : MakePct(summaryTable[row]['prelim_wins'], summaryTable[row]['prelim_rounds']),
-                "Prelim Ballots" : MakePct(summaryTable[row]['prelim_ballots_won'],  summaryTable[row]['prelim_ballots']),
-                "Elim Rds"       : MakePct(summaryTable[row]['elim_wins'] , summaryTable[row]['elim_rounds']),
-                "Elim Ballots"   : MakePct(summaryTable[row]['elim_ballots_won'] , summaryTable[row]['elim_ballots']),
-                "Total"          : MakePct( allwins , allrounds )
-            });
-        }
-    }
-    return myArray
-}
-
-// summary table holds the values for calculating record
-// this seasons's info (prelim, elim, etc) info should be stored at "together-this_yr-open"
-// look at the html of the entries page where the record is calculated - take this code and implement it here
-const summaryTable = {
-    "together-this_yr-open": {
-      "elim_ballots": 11,
-      "elim_ballots_won": 5,
-      "elim_rounds": 5,
-      "elim_wins": 2,
-      "level": "Open",
-      "prelim_ballots": 62,
-      "prelim_ballots_won": 28,
-      "prelim_rounds": 62,
-      "prelim_wins": 28
-    },
-    "-other_yr-open": {
-      "level": "Open",
-      "prelim_ballots": 8,
-      "prelim_ballots_won": 2,
-      "prelim_rounds": 9,
-      "prelim_wins": 2
-    },
-    "4306673": {
-      "i_cheated": 4,
-      "spoke": { "1147307": 8, "1242143": 8 },
-      "third_speaker": "Srikar Kotha 2"
-    },
-    "4411116": { "spoke": { "1147307": 6, "1147308": 6 } },
-    "4529696": { "spoke": { "1147307": 8, "1147308": 8 } },
-    "4529852": { "spoke": { "1147307": 5, "1147308": 5 } },
-    "4610731": { "spoke": { "1147307": 4, "1147308": 4 } },
-    "4610739": { "spoke": { "1147307": 6, "1147308": 6 } },
-    "4647725": { "spoke": { "1147307": 4, "1147308": 4 } },
-    "5160041": { "spoke": { "1147307": 5, "1147308": 5 } },
-    "5189706": { "spoke": { "1147307": 8, "1147308": 8 } },
-    "5227923": { "spoke": {} },
-    "5240824": { "spoke": { "1147307": 8, "1147308": 8 } },
-    "5278615": { "spoke": { "1147307": 6, "1147308": 6 } },
-    "5374863": { "spoke": { "1147307": 3, "1147308": 3 } },
-    "5459469": { "spoke": { "1147307": 8, "1147308": 8 } },
-    "5463021": {
-      "i_cheated": 4,
-      "spoke": { "1089568": 4, "1147307": 4 },
-      "third_speaker": "Kayla Fleming"
-    },
-    "5519786": { "spoke": { "1147307": 8, "1147308": 8 } },
-    "5519796": { "spoke": { "1147307": 8, "1147308": 8 } },
-    "5577358": { "spoke": { "1147307": 4, "1147308": 4 } },
-    "5780528": { "spoke": {} },
-    "5780533": { "spoke": {} },
-    "epochs": {
-      "22938": 1670004000,
-      "24748": 1666944000,
-      "25206": 1673618400,
-      "25513": 1673013600,
-      "25809": 1674856800,
-      "25878": 1677247200,
-      "27534": 1696017600,
-      "27834": 1694260800,
-      "27950": 1705701600,
-      "28284": 1701453600,
-      "28529": 1706882400,
-      "28601": 1697836500,
-      "28779": 1698429600,
-      "29238": 1718542800,
-      "29408": 1708696800,
-      "29451": 1702126800,
-      "29994": 1706277600
-    },
-    "speaker1-other_yr-novice": {
-      "elim_ballots": 2,
-      "elim_ballots_won": 1,
-      "elim_rounds": 2,
-      "elim_wins": 1,
-      "level": "Novice",
-      "prelim_ballots": 4,
-      "prelim_ballots_won": 2,
-      "prelim_rounds": 4,
-      "prelim_wins": 2
-    },
-    "speaker1-other_yr-open": {
-      "level": "Open",
-      "prelim_ballots": 4,
-      "prelim_ballots_won": 1,
-      "prelim_rounds": 5,
-      "prelim_wins": 2
-    },
-    "together-other_yr-open": {
-      "elim_ballots": 11,
-      "elim_ballots_won": 5,
-      "elim_rounds": 5,
-      "elim_wins": 2,
-      "level": "Open",
-      "prelim_ballots": 62,
-      "prelim_ballots_won": 28,
-      "prelim_rounds": 62,
-      "prelim_wins": 28
-    }
-}
-  
-const thisYearArray = MakeArray(summaryTable["together-this_yr-open"])
-console.log(thisYearArray)
