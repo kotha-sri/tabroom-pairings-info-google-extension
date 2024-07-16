@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Tabroom Pairings Info",
-    "description": "embeds opp record and judge para in html of pairing",
+    "name": "Tabroom Pairing Info",
+    "description": "Embeds judge paradigms and opponent record into the tabroom.com pairings page",
     "version": "1.0",
     "permissions": [
         "storage"
@@ -18,5 +18,14 @@
             "https://www.tabroom.com/user/student/history.mhtml?*"
         ],
         "js": ["content.js"]
-    }]
+    }],
+    "icons": {
+        "128": "icons/tab_pair_icon-128.png",
+        "48": "icons/tab_pair_icon-48.png",
+        "38": "icons/tab_pair_icon-38.png",
+        "16": "icons/tab_pair_icon-16.png"
+    },
+    "action": {
+        "default_icon": "icons/tab_pair_icon-128.png"
+    }
 }
