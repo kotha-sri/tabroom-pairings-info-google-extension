@@ -1,6 +1,6 @@
 // TODO:
 //  - collapsible paradigms
-//  - adapt calculateRecord to add novice division as well
+//  - adapt calculateRecord to add other division as well
 //  - save entries of the tournament to storage
 //  - save the latest pairing to storage 
 //  - support swing tournaments
@@ -152,38 +152,38 @@ function getOpponentName() {
 //     return link
 // }
 
+// returns the combined total record of all divisions (Open, JV, Novice, Champ, etc.)
 async function calculateRecord(recordLink) {
-    // const response = await fetch(recordLink)
-    // const html = await response.text()
-    // const currentRecord = JSON.parse("{" + /\"together-this_yr-open":\{[^}]*\}/gm.exec(html)[0] + "}")
+    const response = await fetch(recordLink)
+    const html = await response.text()
+    const summaryTable = JSON.parse(/var summaryTable \= \s*([\S\s]+);\n\tvar myArray=MakeArray/gm.exec(html)[1]) // getting summaryTable (Object of all prelim/elim info) form the response javascript
 
-    // records are empty, so no one has a "together-this_yr-open" yet
-
-    const currentRecord = {
-        "together-this_yr-open": {
-          "elim_ballots": 11,
-          "elim_ballots_won": 5,
-          "elim_rounds": 5,
-          "elim_wins": 2,
-          "level": "Open",
-          "prelim_ballots": 62,
-          "prelim_ballots_won": 28,
-          "prelim_rounds": 62,
-          "prelim_wins": 28
-        }
-    }["together-this_yr-open"]
+    let prelim_rounds = 0
+    let prelim_wins = 0
+    let prelim_ballots = 0
+    let prelim_ballots_won = 0
+    let elim_rounds = 0
+    let elim_wins = 0
+    let elim_ballots = 0
+    let elim_ballots_won = 0
+    let totalRounds = 0
+    let totalWins = 0
     
-    const prelim_rounds = currentRecord["prelim_rounds"]
-    const prelim_wins = currentRecord["prelim_wins"]
-    const prelim_ballots = currentRecord["prelim_ballots"]
-    const prelim_ballots_won = currentRecord["prelim_ballots_won"]
-    const elim_rounds = currentRecord["elim_rounds"]
-    const elim_wins = currentRecord["elim_wins"]
-    const elim_ballots = currentRecord["elim_ballots"]
-    const elim_ballots_won = currentRecord["elim_ballots_won"]
-    const totalRounds = prelim_rounds + elim_rounds
-    const totalWins = prelim_wins + elim_wins
-
+    for (const [key, value] of Object.entries(summaryTable)) {
+        if (key.indexOf("together-this_yr") !== -1 ) { // this season records are under "together-this_yr-{division}", so if the key does not contain that, it's parsable
+            prelim_rounds += value["prelim_rounds"]
+            prelim_wins += value["prelim_wins"]
+            prelim_ballots += value["prelim_ballots"]
+            prelim_ballots_won += value["prelim_ballots_won"]
+            elim_rounds += value["elim_rounds"]
+            elim_wins += value["elim_wins"]
+            elim_ballots += value["elim_ballots"]
+            elim_ballots_won += value["elim_ballots_won"]
+            totalRounds += prelim_rounds + elim_rounds
+            totalWins += prelim_wins + elim_wins
+        }
+    }
+    
     return `
         <tr style="font-size:12px;background-color: #fafafa; border: 1px solid white;">
             <td style="heightborder-bottom: 1px solid white; border-left: 1px solid white;">Totals</td>
@@ -208,6 +208,9 @@ async function getOpponentRecord(opponentCode) {
 
     return calculateRecord()
 }
+
+
+
 
 // loads entries to chrome.storage.local so it's faster and less intensive to retrieve
 // async function loadEntries(entryPage) {
@@ -389,8 +392,8 @@ async function everythingEverywhereAllAtOnce() {
     try {
         const paradgimLinks = getParadigmLinks()
         judgeContent = await formatJudgeContent(paradgimLinks)
-    } catch(error) {
-        console.log(error)
+    } catch(TypeError) {
+        console.log("no paradigm")
         judgeContent = `
             <tr>
                 <td colspan="${colSpan}" style="margin: 0px; padding: 0px;">
@@ -423,9 +426,9 @@ async function everythingEverywhereAllAtOnce() {
     } catch (error) {
         console.log(error)
         opponentContent = `
-            <tr>
-                <td colspan="${colSpan}" style="margin: 0px; padding: 0px;">
-                    <p class="biggish semibold" style="background-color: #ffbdbd; margin-bottom: 0px; border: 1px solid white; margin: 0px; padding: 4px; font-size: 14px">
+            <tr style="margin: 0px; padding: 0px; height: 22px;">
+                <td colspan="${colSpan}" style="margin: 0px; padding: 0px; height: 22px;">
+                    <p class="biggish semibold" style="background-color: #ffbdbd; margin-bottom: 0px; border: 1px solid white; margin: 0px; padding: 4px 4px 4px 8px; font-size: 12px">
                         404 Record Not Found
                     </p>
                 </td>
