@@ -1,11 +1,3 @@
-// TODO:
-//  - collapsible paradigms
-//  - adapt calculateRecord to add other division as well
-//  - save entries of the tournament to storage
-//  - save the latest pairing to storage 
-//  - support swing tournaments
-//  - before publishing, add something that will email any errors (set up a new email, srikar.kotha.dev@gmail.com or something)
-
 // global variables
 const parser = new DOMParser()
 const colSpan = document.getElementsByClassName("full nospace martop dkborderbottom marbottommuchmore padleft")[0].getElementsByTagName('tr')[0].children.length // makes it so that despite varying number of columns, all embedded rows look flush in the table
