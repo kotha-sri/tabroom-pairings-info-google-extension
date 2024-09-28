@@ -1,5 +1,5 @@
-# tabroom-pairings-info-google-extension
-A google extension for debaters that embeds the opponent record and judge paradigm of the latest pairing in the site
+# tabroom Pairings Info
+A google extension for debaters that embeds the judge paradigm and opponent record of the latest pairing directly in the site
 
 Potential Updates
   - collapsible paradigms
