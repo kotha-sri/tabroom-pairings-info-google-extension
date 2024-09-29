@@ -261,8 +261,9 @@ function insertRecordLink(link, code) {
 
 // returns html
 // the empty <tr> tags are the white space between the rows
-function createInsertContent(judgeContent, opponentContent) {
-    return `
+function insertContent(judgeContent, opponentContent) {
+    document.getElementsByClassName("full nospace martop dkborderbottom marbottommuchmore padleft")[0].children[1].children[1].children[0].outerHTML += 
+    `
         <tr style="background-color: white;">
         <td></td>
         </tr>
@@ -276,12 +277,6 @@ function createInsertContent(judgeContent, opponentContent) {
         <td></td>
         </tr>
     `
-}
-
-// inserts the formatted content into the webpage
-function insertHTML(html) {
-    // TODO: change (if needed) for the current tab on the home page, right now is for the results page
-    document.getElementsByClassName("full nospace martop dkborderbottom marbottommuchmore padleft")[0].children[1].children[1].children[0].outerHTML += html
 }
 
 //---------------------------------------BOB THE BUILDER PUTTING IT TOGETHER---------------------------------------
@@ -344,8 +339,7 @@ async function everythingEverywhereAllAtOnce() {
         `
     }
     
-    const insertContent = createInsertContent(judgeContent, opponentContent)
-    insertHTML(insertContent)
+    insertContent(judgeContent, opponentContent)
 }
 
 everythingEverywhereAllAtOnce()
