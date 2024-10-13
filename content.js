@@ -165,11 +165,11 @@ async function calculateRecord(recordLink) {
     return `
         <tr style="font-size:12px;background-color: #fafafa; border: 1px solid white;">
             <td style="heightborder-bottom: 1px sol+id white; border-left: 1px solid white;">Totals</td>
-            <td style="border-bottom: 1px solid white;">${(prelim_wins / prelim_rounds * 100).toFixed(1)}% (${prelim_wins}/${prelim_rounds})</td>
-            <td style="border-bottom: 1px solid white;">${(prelim_ballots_won / prelim_ballots * 100).toFixed(1)}% (${prelim_ballots_won}/${prelim_ballots})</td>
-            <td style="border-bottom: 1px solid white;">${(elim_wins / elim_rounds * 100).toFixed(1)}% (${elim_wins}/${elim_rounds})</td>
-            <td style="border-bottom: 1px solid white;">${(elim_ballots_won / elim_ballots * 100).toFixed(1)}% (${elim_ballots_won}/${elim_ballots})</td>
-            <td style="border-bottom: 1px solid white; border-right: 1px solid white;">${(totalWins / totalRounds * 100).toFixed(1)}% (${totalWins}/${totalRounds})</td>
+            <td style="border-bottom: 1px solid white;">${(((prelim_wins / prelim_rounds) || 0) * 100).toFixed(1) }% (${prelim_wins}/${prelim_rounds})</td>
+            <td style="border-bottom: 1px solid white;">${(((prelim_ballots_won / prelim_ballots) || 0) * 100).toFixed(1)}% (${prelim_ballots_won}/${prelim_ballots})</td>
+            <td style="border-bottom: 1px solid white;">${(((elim_wins / elim_rounds) || 0) * 100).toFixed(1)} % (${elim_wins}/${elim_rounds})</td>
+            <td style="border-bottom: 1px solid white;">${(((elim_ballots_won / elim_ballots) || 0) * 100).toFixed(1)}% (${elim_ballots_won}/${elim_ballots})</td>
+            <td style="border-bottom: 1px solid white; border-right: 1px solid white;">${(((totalWins / totalRounds) || 0) * 100).toFixed(1)}% (${totalWins}/${totalRounds})</td>
         </tr>
     `
 }
