@@ -15,4 +15,3 @@ Potential Updates
   - save entries of the tournament to storage
   - save the latest pairing to storage 
   - support swing tournaments
-  - add error handling
