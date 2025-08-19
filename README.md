@@ -1,4 +1,5 @@
 # Tabroom Pairings Info
+<img src="icons/tab_pair_icon-128.png" alt="logo" width="100"/>
 
 __UPDATE: the extension no longer works as Tabroom is migrating away from its old libraries. Will update the extension once that is compelete.__
 
