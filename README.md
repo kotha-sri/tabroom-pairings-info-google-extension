@@ -2,7 +2,9 @@
 
 <img width="128" height="128" alt="tab_pair_icon-128" src="https://github.com/user-attachments/assets/022f19b0-dd18-4e3a-8f68-6a404000fd37" />
 
-UPDATE: the extension no longer works as Tabroom is migrating away from its old libraries. Will update the extension once that is compelete.
+<span style="background-color: yellow;">UPDATE: the extension no longer works as Tabroom is migrating away from its old libraries. Will update the extension once that is compelete.</span>
+
+<span style="background-color: white">Marked text</span>
 
 A google extension for debaters (any event with a record really) that embeds the judge paradigm and opponent record of the latest pairing directly in the site
 
